@@ -6,6 +6,7 @@ export interface Article {
   date: string;
   readTime: string;
   imageUrl: string;
+  contentFile: string; // Markdown 文件路径
 }
 
 export interface Thought {
@@ -23,6 +24,7 @@ export const ARTICLES: Article[] = [
     date: '2024年3月12日',
     readTime: '12分钟阅读',
     imageUrl: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=800',
+    contentFile: './articles/augustine-digital-city.md',
   },
   {
     id: '2',
@@ -32,6 +34,7 @@ export const ARTICLES: Article[] = [
     date: '2024年3月10日',
     readTime: '8分钟阅读',
     imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800',
+    contentFile: './articles/technology-alienation.md',
   },
   {
     id: '3',
@@ -41,6 +44,7 @@ export const ARTICLES: Article[] = [
     date: '2024年3月5日',
     readTime: '15分钟阅读',
     imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800',
+    contentFile: './articles/silicon-valley-philosophers.md',
   },
   {
     id: '4',
@@ -50,6 +54,7 @@ export const ARTICLES: Article[] = [
     date: '2024年3月1日',
     readTime: '10分钟阅读',
     imageUrl: 'https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&q=80&w=800',
+    contentFile: './articles/ai-anxiety.md',
   }
 ];
 

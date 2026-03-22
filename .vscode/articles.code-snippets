@@ -1,0 +1,15 @@
+{
+  "Blog Frontmatter": {
+    "prefix": "post",
+    "scope": "markdown",
+    "body": [
+      "---",
+      "title: $1",
+      "excerpt: $2",
+      "date: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+      "---      "",
+      "$0"
+    ],
+    "description": "生成博客文章的 Markdown 属性头"
+  }
+}

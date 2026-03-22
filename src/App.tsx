@@ -3,13 +3,14 @@ import { motion, AnimatePresence } from 'motion/react';
 import { User, ArrowRight, Lightbulb, BookOpen, ArrowLeft } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ARTICLES, THOUGHTS, Article } from './data';
-import { articleContents } from './articles-map';
+import { Article } from './data';
+import { ARTICLES, getArticleContent } from './articles-map';
+import { THOUGHTS } from './data-thoughts';
 import { cn } from './lib/utils';
 
 // 文章详情组件
 function ArticleView({ article, onBack }: { article: Article; onBack: () => void }) {
-  const content = articleContents[article.id] || '文章内容加载失败';
+  const content = getArticleContent(article.id);
 
   return (
     <motion.div
@@ -30,12 +31,8 @@ function ArticleView({ article, onBack }: { article: Article; onBack: () => void
 
       {/* 文章头部 */}
       <header className="mb-12 space-y-6">
-        <div className="flex items-center space-x-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-highlight">
-          <span>{article.category}</span>
-          <span className="w-1 h-1 bg-brand-highlight rounded-full"></span>
-          <span className="text-brand-muted">{article.date}</span>
-          <span className="w-1 h-1 bg-brand-highlight rounded-full"></span>
-          <span className="text-brand-muted">{article.readTime}</span>
+        <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-muted">
+          {article.date}
         </div>
 
         <h1 className="text-4xl md:text-5xl font-serif leading-tight font-medium">
@@ -196,10 +193,8 @@ export default function App() {
                         className="group cursor-pointer border-b border-brand-ink/5 pb-8 last:border-0"
                       >
                         <div className="space-y-3">
-                          <div className="flex items-center space-x-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-highlight">
-                            <span>{article.category}</span>
-                            <span className="w-1 h-1 bg-brand-highlight rounded-full"></span>
-                            <span className="text-brand-muted">{article.date}</span>
+                          <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-muted">
+                            {article.date}
                           </div>
                           <h4 className="text-2xl font-serif font-medium group-hover:text-brand-highlight transition-colors">
                             {article.title}
@@ -208,9 +203,6 @@ export default function App() {
                             {article.excerpt}
                           </p>
                           <div className="flex items-center justify-between">
-                            <div className="text-[10px] text-brand-muted uppercase tracking-widest pt-1">
-                              {article.readTime}
-                            </div>
                             <div className="flex items-center space-x-1 text-brand-accent text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                               <span>阅读全文</span>
                               <ArrowRight size={14} />

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { User, ArrowRight, Lightbulb, BookOpen, ArrowLeft } from 'lucide-react';
+import { User, ArrowRight, Lightbulb, BookOpen, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Article } from './data';
 import { ARTICLES, getArticleContent } from './articles-map';
 import { THOUGHTS } from './data-thoughts';
 import { cn } from './lib/utils';
+
+const ITEMS_PER_PAGE = 5; // 每页显示文章数
 
 // 文章详情组件
 function ArticleView({ article, onBack }: { article: Article; onBack: () => void }) {
@@ -86,6 +88,13 @@ function ArticleView({ article, onBack }: { article: Article; onBack: () => void
 
 export default function App() {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // 分页计算
+  const totalPages = Math.ceil(ARTICLES.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentArticles = ARTICLES.slice(startIndex, endIndex);
 
   const handleArticleClick = (article: Article) => {
     setSelectedArticle(article);
@@ -94,6 +103,11 @@ export default function App() {
 
   const handleBackToList = () => {
     setSelectedArticle(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -185,7 +199,7 @@ export default function App() {
 
                   <div className="space-y-10">
                     {/* All Articles Unified */}
-                    {ARTICLES.map((article) => (
+                    {currentArticles.map((article) => (
                       <motion.article
                         key={article.id}
                         whileHover={{ x: 4 }}
@@ -212,6 +226,55 @@ export default function App() {
                       </motion.article>
                     ))}
                   </div>
+
+                  {/* 分页导航 */}
+                  {totalPages > 1 && (
+                    <div className="flex items-center justify-center space-x-2 pt-8 border-t border-brand-ink/10">
+                      {/* 上一页按钮 */}
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={cn(
+                          "p-2 rounded transition-colors",
+                          currentPage === 1
+                            ? "text-brand-ink/20 cursor-not-allowed"
+                            : "text-brand-muted hover:text-brand-ink hover:bg-brand-ink/5"
+                        )}
+                      >
+                        <ChevronLeft size={20} />
+                      </button>
+
+                      {/* 页码按钮 */}
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <button
+                          key={page}
+                          onClick={() => handlePageChange(page)}
+                          className={cn(
+                            "w-10 h-10 rounded text-sm font-medium transition-colors",
+                            page === currentPage
+                              ? "bg-brand-accent text-white"
+                              : "text-brand-muted hover:text-brand-ink hover:bg-brand-ink/5"
+                          )}
+                        >
+                          {page}
+                        </button>
+                      ))}
+
+                      {/* 下一页按钮 */}
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className={cn(
+                          "p-2 rounded transition-colors",
+                          currentPage === totalPages
+                            ? "text-brand-ink/20 cursor-not-allowed"
+                            : "text-brand-muted hover:text-brand-ink hover:bg-brand-ink/5"
+                        )}
+                      >
+                        <ChevronRight size={20} />
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Right Sidebar */}
